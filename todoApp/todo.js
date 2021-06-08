@@ -17,6 +17,16 @@ const createCustomElement = (parent, element, classes , attributes, text) => {
     return myElement
 }
 
+const editTask = (id, newTitle, newContent) =>{
+    findedIndex= tasks.findIndex(task => task.id==id)
+    if(findedIndex === -1 ) return console.log('task not found')
+    tasks= getAllData()
+    tasks[findedIndex].title = newTitle
+    tasks[findedIndex].content = newContent
+    setAllData(tasks)
+   
+}
+
 const drawTask = (task,i) =>{
     
     taskDiv = createCustomElement(rowContainer, 'div', 'col-4 ', [], '')
@@ -33,23 +43,29 @@ const drawTask = (task,i) =>{
     })
     edtBtn = createCustomElement(innerDiv, 'button', 'btn btn-primary c', [], 'edit')
     edtBtn.addEventListener('click', function(e){
+        tasks = getAllData()
         console.log(tasks[i]["id"])
+        console.log(tasks[i]["title"])
         edtTask = document.querySelector('#edtTask')
-        rowContainer = createCustomElement(edtTask, 'form', 'row', [], '')
+        rowContainer = createCustomElement(edtTask, 'form', 'row', [{"attrName":"id","attValue" :"editTask" }], '')
         taskHeads.forEach(h=>{
             edtDiv = createCustomElement(rowContainer, 'input', 'col-4 ', [{"attrName":"value","attValue" : tasks[i][h] },{"attrName":"name","attValue" : h }],'')
         })
         btnDiv = createCustomElement(rowContainer, 'button', 'col-4 ', [{"attrName":"type","attValue" :"submit" }],'submit')
-        document.querySelector('#addTask').addEventListener('submit', function(e){
+        document.querySelector('#editTask').addEventListener('submit', function(e){
             e.preventDefault()
-            console.log(task)
+            task=tasks[i]
             console.log(task)
             taskHeads.forEach((h,i) => {
                 if(i!=0 && h!="status") task[h] = e.target.elements[h].value
                 else if(h=="status") task[h] = e.target.elements[h].checked
             })
-            updtTask(task) 
-            // drawTask(task,i)
+            
+            editTask(task.id,task.title, task.content)
+            location.reload();
+            this.reset()
+            
+            
             
         })
     })
@@ -62,16 +78,39 @@ const addTask = (task) =>{
     setAllData(tasks)
 }
 
-const updtTask = (newTask) =>{
-    tasks = getAllData()
-    tasks.forEach((task,i)=>{
-        if(task["id"] == newTask["id"]) task["title"] = newTask["title"]
+// const updtTask = (newTask) =>{
+//     tasks = getAllData()
+//     tasks.forEach((task,i)=>{
+//         if(task["id"] == newTask["id"]) task["title"] = newTask["title"]
         
-    })
+//     })
     
-    console.log(task )
+//     console.log(task )
+//     setAllData(tasks)
+// }
+
+const showAllTasks =()=>{
+    tasks= getAllData()
+    tasks.forEach(task => {
+        console.log(`id: ${task.id} and title: ${task.title} and content: ${task.content}`)        
+    });
+}
+
+const getSingleTaskIndex =(id)=>{
+    tasks= getAllData()
+    findedIndex= tasks.findIndex(task => task.id==id)
+    return findedIndex
+}
+
+
+const deleteTask = (id) =>{
+    findedIndex =  getSingleTaskIndex(id)
+    if(findedIndex === -1 ) return console.log('task not found')
+    tasks= getAllData()
+    tasks.splice(findedIndex,1)
     setAllData(tasks)
 }
+
 
 let tasks = getAllData()
 allTasks = document.querySelector('#allTasks')
@@ -106,6 +145,8 @@ document.querySelector('#addTask').addEventListener('submit', function(e){
     this.reset()
 })
 
+
+
 // dels = document.querySelectorAll('.c')
 // dels.forEach((d, i)=>{
 //     d.addEventListener('click', function(e){
@@ -119,5 +160,8 @@ document.querySelector('#addTask').addEventListener('submit', function(e){
     
 // })
 
-
+//  showAllTasks();
+//getSingleTaskIndex(3);
+// editTask(2,'posts','nnnnnbbbb');
+// deleteTask(6);
 
