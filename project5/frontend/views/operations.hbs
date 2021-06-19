@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        {{#if result.name}}
+            <h1>{{result.name}}</h1>
+        {{/if}}
+        <hr>
+        
+        <table>
+            <thead>
+                <th>amount</th>
+                <th>date  </th>
+                <th>location</th>
+                <th>handle</th>
+            </thead>
+            {{#each op}}
+            <tbody>
+                
+                <td>{{this.amount}} </td>
+                <td>{{this.date}} </td>
+                <td>{{this.location}} </td>
+                <td><a href="/operation/{{this._id}}">show</a> <a href="/deleteOp/{{this._id}}">delete</a>  <a href="/editOp/{{this._id}}">edit</a></td>
+                
+            </tbody>
+            {{/each }}
+            <section>
+                <a href="/addOperation">Add Operation</a>
+            </section>
+        </table>
+        
+    </section>
+</body>
+</html>
